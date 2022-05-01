@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import registerview, change_password, loginview, logout_view
+from user_profile.views import profile_detail_view, update_Profile, allUser
+from django.conf import settings  
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +26,10 @@ urlpatterns = [
     path('changepwd/', change_password, name='change_password'),
     path('login/', loginview, name='user_login'),
     path('logout/', logout_view, name='user_logout'),
+
+    path('profiles/<slug:slug>/', profile_detail_view, name='profile_detail'),
+    path('profiles/<slug:slug>/update', update_Profile, name='update_profile_detail'),
+    path('alluser/', allUser, name ='all_data'),
 ]
+if settings.DEBUG:  
+        urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
