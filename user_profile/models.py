@@ -19,11 +19,11 @@ class Profile(models.Model):
     entry_date = models.DateTimeField(auto_now_add=True, null=True)
     undated_date = models.DateTimeField(auto_now=True, null=True)
 
-    photo = models.ImageField(upload_to='image',null=False, default='Capture.PNG')
+    photo = models.ImageField(upload_to='images/profile_photo', default='Capture.PNG')
     image_thumbnail =ImageSpecField(source='photo', processors=[ResizeToFill(100,50)], format='JPEG', options={'quality': 60})
     tag = RichTextField(blank=True,null=True)
     contact = models.CharField(max_length=10, null=True)
-    email = models.EmailField(null=True, max_length = 50)
+    email = models.EmailField(null=True, max_length = 50,help_text='Enter your email addresses')
     address = models.CharField(max_length = 50,blank=True,null=True)
     about = RichTextField(blank=True,null=True)
     Hobby = RichTextField(blank=True,null=True)
