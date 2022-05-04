@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+
+<body>
+    {% for objs in objec %}
+        <h4> {{objs.user}} </h4>
+        <a href='/profiles/{{objs.slug}}/'>Learn More</a>
+        <br>
+    {% endfor %}
+</body>
