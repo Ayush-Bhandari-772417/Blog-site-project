@@ -1,0 +1,10 @@
+{% block title %}Profile Page{% endblock title %}
+    <div class="row my-3 p-3">
+        <h1>Title :- {{objs.title}}</h1>
+        author = {{objs.author}}
+        
+                    
+        {% thumbnail objs.photo "100x100" crop="center" as im %}
+        <img src="{{ objs.photo.url }}" width=50 height=100>
+        {% endthumbnail %}
+    </div>

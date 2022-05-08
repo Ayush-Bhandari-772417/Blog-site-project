@@ -38,7 +38,7 @@ def update_Profile(request, slug):
             if form.is_valid():
                 form.save()
                 # return redirect('profile_detail')
-                return redirect('all_data')
+                return redirect('all_data') 
         return render(request, 'prof_update.html',{'form':form})
     else:
         return HttpResponse('You are not the cocerned user')

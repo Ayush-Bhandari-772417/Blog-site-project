@@ -10,8 +10,8 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Category(models.Model):
-    name=models.CharField(max_length=50,unique=True)
-    adder = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    name=models.CharField(max_length=50)
+    adder = models.OneToOneField(User, null=True, on_delete=models.CASCADE, editable=False)
     def __str__(self):
         return self.name
 
@@ -27,6 +27,7 @@ class BlogPost(models.Model):
     main_picture = models.ImageField(upload_to='images/user_blog_photo', default='Capture.PNG')
     image_thumbnail =ImageSpecField(source='main_picture', processors=[ResizeToFill(100,50)], format='JPEG', options={'quality': 60})
     Content = RichTextField(blank=False,null=False)
+    view = models.IntegerField(default=0)
     count_comments=models.IntegerField(default=0)
 
     def __str__(self):
@@ -38,10 +39,10 @@ class BlogPost(models.Model):
         super(BlogPost, self).save(*args, **kwargs)
 
 class BlogComment(models.Model):
-    comment=models.TextField(max_length=500)
+    comment=RichTextField(blank=False,null=False)
     commentor=models.ForeignKey(User,on_delete=models.CASCADE,editable=False)
     date_commented=models.DateTimeField(auto_now_add=True)
-    blog=models.ForeignKey(BlogPost,on_delete=models.CASCADE)
+    blog=models.ForeignKey(BlogPost,on_delete=models.CASCADE,related_name="comments")
 
     def __str__(self):
         return self.comment

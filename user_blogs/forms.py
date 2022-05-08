@@ -6,12 +6,13 @@ from .models import Category, BlogPost, BlogComment
 class Category_Add_Form(forms.ModelForm):
     class Meta:
         model=Category
-        fields='__all__'
+        fields = '__all__'
+        # fields=['name']
 
 class Blog_Post_Form(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = '__all__'
+        fields=['title','category','main_picture','Content']
 
 class Blog_Comment_Form(forms.ModelForm):
     class Meta:
