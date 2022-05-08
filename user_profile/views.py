@@ -2,21 +2,12 @@ from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
 from .models import Profile
-from .forms import Prof_Update_Form, profileForm
+from .forms import Prof_Update_Form
 from django.http import Http404
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 # Create your views here.
-
-def addProfile(request):
-    form=profileForm()
-    if request.method=='POST':
-        form = profileForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('all_data')
-    return render(request, 'Profiles.html',{'form':form})
 
 def allUser(request):
     alldata = Profile.objects.all()
@@ -47,7 +38,7 @@ def update_Profile(request, slug):
             if form.is_valid():
                 form.save()
                 # return redirect('profile_detail')
-                return redirect('all_data')
+                return redirect('all_data') 
         return render(request, 'prof_update.html',{'form':form})
     else:
         return HttpResponse('You are not the cocerned user')

@@ -19,6 +19,7 @@ def registerview(request):
             form.save()
             return HttpResponse('this is correct ')
         else:
+            messages.error(request, 'Please correct the error below.')
             return HttpResponse('this is wrong details ')
     return render(request, 'register.html',{'form':form})
 
@@ -49,6 +50,7 @@ def loginview(request):
                 login(request, user)
                 return redirect('add_user')
             else:
+                messages.error(request, 'Please correct the error below.')
                 return HttpResponse('this is wrong details ')
     return render(request, 'login.html',{'form':form})
 

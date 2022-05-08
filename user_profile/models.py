@@ -12,11 +12,11 @@ from django.dispatch import receiver
 # Create your models here.
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, editable=False)
     name = models.CharField(max_length = 50)
 
-    slug = models.SlugField()
-    entry_date = models.DateTimeField(auto_now_add=True, null=True)
+    slug = models.SlugField(unique=True,null=False,blank=False,editable=False)
+    entry_date = models.DateTimeField(auto_now_add=True, null=True, editable=False)
     undated_date = models.DateTimeField(auto_now=True, null=True)
 
     photo = models.ImageField(upload_to='images/profile_photo', default='Capture.PNG')
@@ -34,6 +34,10 @@ class Profile(models.Model):
     Honors_awards = RichTextField(blank=True,null=True)
     Languages = RichTextField(blank=True,null=True)
     Organizations = RichTextField(blank=True,null=True)
+    no_of_new_category=models.IntegerField(default=0)
+    no_of_blog=models.IntegerField(default=0)
+    no_of_comments=models.IntegerField(default=0)
+    no_of_activities=models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.user)

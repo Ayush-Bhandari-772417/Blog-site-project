@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import registerview, change_password, loginview, logout_view
-from user_profile.views import profile_detail_view, update_Profile, allUser, addProfile
+from user_profile.views import profile_detail_view, update_Profile, allUser
+from user_blogs.views import add_Category, blog_post, blog_comment, update_Blog, allBlog, detail_blog_view
 from django.conf import settings  
 from django.conf.urls.static import static
 
@@ -28,10 +29,15 @@ urlpatterns = [
     path('logout/', logout_view, name='user_logout'),
 
     path('profiles/<slug:slug>/', profile_detail_view, name='profile_detail'),
-    path('profiles/<slug:slug>/update', update_Profile, name='update_profile_detail'),
+    path('profiles/<slug:slug>/update/', update_Profile, name='update_profile_detail'),
     path('alluser/', allUser, name ='all_data'),
-    
-    path('thumb/', addProfile),
+
+    path('add/category/', add_Category, name='add_category'),
+    path('blogpost/',blog_post, name='post_blog'),
+    path('<slug:slug>/comment/',blog_comment, name='comment_blog'),
+    path('blog/<slug:slug>/update',update_Blog, name='update_blog'),
+    path('allblog/',allBlog,name = 'all_blog_posted'),
+    path('blog/<slug:slug>', detail_blog_view, name='full_blog'),
 ]
 if settings.DEBUG:  
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
