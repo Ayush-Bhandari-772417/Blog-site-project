@@ -1,4 +1,4 @@
-{% block title %}Profile Page{% endblock title %}
+{% block title %}Blog detail{% endblock title %}
     <div class="row my-3 p-3">
         <h1>Title :- {{objs.title}}</h1>
         author = {{objs.author}}
@@ -8,3 +8,8 @@
         <img src="{{ objs.photo.url }}" width=50 height=100>
         {% endthumbnail %}
     </div>
+
+    <form action="{% url 'like_post' post.pk %}" method="POST">
+        {% csrf_token %}
+        <button type="submit",name="post_id",value="{{ post.id }}", class="btn btn-primary btn-sm">Like</button>
+    </form>

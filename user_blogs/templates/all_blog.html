@@ -1,3 +1,4 @@
+{% load thumbnail %}
 {% block title %}Profile Page{% endblock title %}
     <div class="row my-3 p-3">
     </div>
@@ -10,15 +11,16 @@
 
 <body>
     {% for objs in objec %}
-
         <a href = '/blog/{{objs.slug}}'>
-        <h1>Title :- {{objs.title}}</h1>
-        author = {{objs.author}}
-        view : {{objs.view}}
+            
+            <h1>Title :- {{objs.title}}</h1>
+            author = {{objs.author}}
+            view : {{objs.view}}<br>
+            SLUG = {{objs.slug}}
         
-        {% thumbnail objs.photo "100x100" crop="center" as im %}
-        <img src="{{ objs.photo.url }}" width=50 height=100>
-        {% endthumbnail %}
-    </a>
+            {% thumbnail objs.photo "100x100" crop="center" as im %}
+                <img src="{{ objs.main_picture.url }}" width="{{ objs.main_picture.width }}" height="{{ objs.main_picture.height }}">
+            {% endthumbnail %}
+        </a>
     {% endfor %}
 </body>

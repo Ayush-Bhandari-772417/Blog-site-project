@@ -20,7 +20,7 @@ def registerview(request):
             return HttpResponse('this is correct ')
         else:
             messages.error(request, 'Please correct the error below.')
-            return HttpResponse('this is wrong details ')
+            # return HttpResponse('this is wrong details ')
     return render(request, 'register.html',{'form':form})
 
 @login_required

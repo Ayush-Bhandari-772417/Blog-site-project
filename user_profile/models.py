@@ -1,4 +1,5 @@
 from django.db import models
+from BLOG.utils import unique_slug_generator
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from django.utils.text import slugify
@@ -9,13 +10,15 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+import random
+import string
 # Create your models here.
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE, editable=False)
     name = models.CharField(max_length = 50)
 
-    slug = models.SlugField(unique=True,null=False,blank=False,editable=False)
+    slug = models.SlugField(unique=True,null=False,blank=False)
     entry_date = models.DateTimeField(auto_now_add=True, null=True, editable=False)
     undated_date = models.DateTimeField(auto_now=True, null=True)
 
@@ -42,6 +45,22 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
     
+    # def slug_generator(sender, instance, *args, **kwargs):
+    #     if not instance.slug:
+    #         instance.slug = unique_slug_generator(instance)
+
+    def save(self, *args, **kwargs):
+        slug_txt=f'{self.user}'
+        self.slug = unique_slug_generator(self)
+        qs_exists = Profile.objects.filter(slug=slug_txt)
+        if qs_exists:
+            new_slug = "{slug}-{randstr}".format(
+                slug=slug_txt,
+                randstr=random_string_generator(size=4)
+            )
+            self.slug = new_slug
+        super(Profile, self).save(*args, **kwargs)
+    
     # def create_profile(sender, instance, created, **kwargs):
     #     if created:
     #         Profile.objects.create(sender=instance)
@@ -58,7 +77,6 @@ class Profile(models.Model):
     def save_profile(sender, instance, **kwargs):
         instance.profile.save()
 
-    def save(self, *args, **kwargs):
-        slug_txt=f'{self.user}'
-        self.slug = slugify(slug_txt)
-        super(Profile, self).save(*args, **kwargs)
+
+def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))

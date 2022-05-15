@@ -7,6 +7,7 @@
     {% for objs in objec %}
         <h4> {{objs.user}} </h4>
         <a href='/profiles/{{objs.slug}}/'>Learn More</a>
+        {{objs.slug}}
         <br>
     {% endfor %}
 </body>
