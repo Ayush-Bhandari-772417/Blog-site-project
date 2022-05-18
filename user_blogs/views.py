@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from user_profile.models import Profile
 from .models import Category, BlogPost, BlogComment
@@ -17,12 +18,11 @@ def allBlog(request):
 
 def detail_blog_view(request, slug=None):
     blog_obj = None
-    # profile_obj = None
     if slug is not None:
         try:
-            blog_obj = Blog.objects.get(slug=slug)
-            blog_obj.view = blog_obj + 1
-            form.save()
+            blog_obj = BlogPost.objects.get(slug=slug)
+            blog_obj.view = blog_obj.view + 1
+            blog_obj.save()
         except:
             raise Http404
     context = {
@@ -34,11 +34,12 @@ def detail_blog_view(request, slug=None):
 def add_Category(request):
     form = Category_Add_Form()
     if request.method == 'POST':
-        form = Category_Add_Form(request.POST)
+        form = Category_Add_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            a = request.user.username
-            prof = Profile.objects.get(slug=a)
+            Job = form.save(commit=False)
+            Job.adder = request.user
+            Job.save()
+            prof = Profile.objects.get(slug=request.user)
             prof.no_of_activities = prof.no_of_activities + 1
             prof.no_of_new_category = prof.no_of_new_category + 1
             prof.save()
@@ -49,20 +50,22 @@ def add_Category(request):
 
 @login_required
 def blog_post(request):
-    form = Blog_Post_Form()
-    if request.method == 'POST':
-        form = Blog_Post_Form(request.POST or None, request.FILES or None, instance=dest)
+    form=Blog_Post_Form()
+    if request.method=='POST':
+        form = Blog_Post_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            a = request.user.username
-            prof = Profile.objects.get(slug=a)
+            Job = form.save(commit=False)
+            Job.author = request.user
+            Job.save()
+            prof = Profile.objects.get(slug=request.user)
             prof.no_of_activities = prof.no_of_activities + 1
             prof.no_of_blog = prof.no_of_blog + 1
             prof.save()
             return HttpResponse('Your new blog is created ')
+            return redirect('all_data')
         else:
             messages.error(request, 'Please correct the error below.')
-    return render(request, 'add_category.html',{'form':form})
+    return render(request, 'add_blog.html',{'form':form})
 
 @login_required
 def blog_comment(request, slug = None):
@@ -70,12 +73,13 @@ def blog_comment(request, slug = None):
     if request.method == 'POST':
         form = Blog_Comment_Form(request.POST or None, request.FILES or None, instance=dest)
         if form.is_valid():
-            form.save()
+            Job = form.save(commit=False)
+            Job.commentor = request.user
+            Job.save()
             dest = BlogPost.objects.get(slug=slug)
             dest.count_comments = dest.count_comments + 1
             dest.save()
-            a = request.user.username
-            prof = Profile.objects.get(slug=a)
+            prof = Profile.objects.get(slug=request.user)
             prof.no_of_activities = prof.no_of_activities + 1
             prof.no_of_comments = prof.no_of_comments + 1
             prof.save()
@@ -97,3 +101,9 @@ def update_Blog(request, slug):
         return render(request, 'add_category.html',{'form':form})
     else:
         return HttpResponse('You are not the author of this blog')
+
+
+def LikeView(request, pk):
+    post = get_object_or_404(BlogPost, id=request.POST.get('post_id'))
+    post.likes.add(request.user)
+    return HttpResponseRedirect(reverse('full_blog', args=[str(pk)]))

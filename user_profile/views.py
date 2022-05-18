@@ -18,13 +18,12 @@ def profile_detail_view(request, slug=None):
     if slug is not None:
         try:
             profile_obj = Profile.objects.get(slug=slug)
-            users_det = User.objects.get(username=slug)
         except:
             raise Http404
     context = {
         "object": profile_obj,
     }
-    return render(request,"profile.html",{'objs':profile_obj, 'userss':users_det})
+    return render(request,"profile.html",{'objs':profile_obj})
 
 @login_required
 def update_Profile(request, slug):

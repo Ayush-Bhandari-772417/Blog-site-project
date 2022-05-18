@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from authentication.views import registerview, change_password, loginview, logout_view
 from user_profile.views import profile_detail_view, update_Profile, allUser
-from user_blogs.views import add_Category, blog_post, blog_comment, update_Blog, allBlog, detail_blog_view
+from user_blogs.views import add_Category, blog_post, blog_comment, update_Blog, allBlog, detail_blog_view, LikeView
 from django.conf import settings  
 from django.conf.urls.static import static
 
@@ -37,7 +37,8 @@ urlpatterns = [
     path('<slug:slug>/comment/',blog_comment, name='comment_blog'),
     path('blog/<slug:slug>/update',update_Blog, name='update_blog'),
     path('allblog/',allBlog,name = 'all_blog_posted'),
-    path('blog/<slug:slug>', detail_blog_view, name='full_blog'),
+    path('blog/<slug:slug>/', detail_blog_view, name='full_blog'),
+    path('like/<int:pk>', LikeView, name='like_post'),
 ]
 if settings.DEBUG:  
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
