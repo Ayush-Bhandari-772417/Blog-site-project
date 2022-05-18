@@ -11,7 +11,7 @@
 
 <body>
     {% for objs in objec %}
-        <a href = '/blog/{{objs.slug}}'>
+    <a href='{% url 'full_blog' objs.slug %}'>
             
             <h1>Title :- {{objs.title}}</h1>
             author = {{objs.author}}

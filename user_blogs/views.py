@@ -18,17 +18,16 @@ def allBlog(request):
 
 def detail_blog_view(request, slug=None):
     blog_obj = None
-    # profile_obj = None
     if slug is not None:
         try:
-            blog_obj = Blog.objects.get(slug=slug)
-            blog_obj.view = blog_obj + 1
-            form.save()
+            blog_obj = BlogPost.objects.get(slug=slug)
+            blog_obj.view = blog_obj.view + 1
+            blog_obj.save()
         except:
             raise Http404
-    # context = {
-    #     "object": blog_obj,
-    # }
+    context = {
+        "object": blog_obj,
+    }
     return render(request,"detail_blog.html",{'objs':blog_obj})
 
 @login_required

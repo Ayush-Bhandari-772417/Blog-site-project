@@ -6,3 +6,4 @@ from .models import Category, BlogPost, BlogComment
 admin.site.register(Category)
 admin.site.register(BlogPost)
 admin.site.register(BlogComment)
+admin.site.register(Viewer)

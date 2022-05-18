@@ -63,3 +63,8 @@ class BlogComment(models.Model):
         slug_txt=str(datetime.now())+''+self.commentor
         self.slug = slugify(slug_txt)
         super(Profile, self).save(*args, **kwargs)
+
+class Viewer(models.Model):
+    viewers = models.TextField(default=None)
+    def __str__(self):
+        return self.viewers
